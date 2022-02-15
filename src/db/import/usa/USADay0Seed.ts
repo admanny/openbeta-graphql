@@ -57,7 +57,7 @@ const printStats = (stats: Array<JobStats|any>): void => {
       console.log(entry)
       const e = entry as JobStats
       sums.climbs += e.climbCount
-      sums.areas += e.climbCount
+      sums.areas += e.areaCount
       sums.states += 1
     }
   }
