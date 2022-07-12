@@ -59,6 +59,7 @@ export const gracefulExit = async (exitCode: number = 0): Promise<void> => {
   })
 }
 
+// eslint-disable-next-line
 process.on('SIGINT', gracefulExit).on('SIGTERM', gracefulExit)
 
 export { getMediaModel, getAreaModel, getClimbModel, getClimbHistoryModel, getAreaHistoryModel }

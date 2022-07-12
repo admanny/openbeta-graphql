@@ -27,8 +27,8 @@ import streamListener from './db/edit/streamListener.js'
   await connectDB(async () => {
     getMediaModel()
     await createIndexes()
-    streamListener(mongoose.connection)
     console.log('Kudos!')
+    await streamListener(mongoose.connection)
   })
 
   const port = 4000

@@ -66,4 +66,4 @@ const printStats = (stats: Array<JobStats|any>): void => {
   console.log('Total: ', sums)
 }
 
-connectDB(main)
+void connectDB(main)
