@@ -69,7 +69,7 @@ const onDBConnected = async (): Promise<void> => {
   const apiKey = process.env.TYPESENSE_API_KEY ?? ''
 
   if (node === '' || apiKey === '') {
-    gracefulExit(1)
+    await gracefulExit(1)
   }
 
   console.log('Start pushing data to TypeSense')
@@ -99,7 +99,7 @@ const onDBConnected = async (): Promise<void> => {
     await typesense.collections().create(schema)
   } catch (error) {
     console.log(error)
-    gracefulExit()
+    await gracefulExit()
   }
 
   /**
@@ -176,7 +176,7 @@ const onDBConnected = async (): Promise<void> => {
   }
 
   console.log('Record uploaded: ', count)
-  gracefulExit()
+  await gracefulExit()
 }
 
 /**

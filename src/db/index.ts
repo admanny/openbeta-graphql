@@ -19,7 +19,7 @@ export const checkVar = (name: string): string => {
 
 const defaultFn = console.log.bind(console, 'DB connected successfully')
 
-export const connectDB = (onConnected: () => any = defaultFn): any => {
+export const connectDB = async (onConnected: () => any = defaultFn): Promise<any> => {
   const user = checkVar('MONGO_INITDB_ROOT_USERNAME')
   const pass = checkVar('MONGO_INITDB_ROOT_PASSWORD')
   const server = checkVar('MONGO_SERVICE')
@@ -28,12 +28,7 @@ export const connectDB = (onConnected: () => any = defaultFn): any => {
     `Connecting to database 'mongodb://${user}:****@${server}'...`
   )
   try {
-    /* eslint-disable @typescript-eslint/no-floating-promises */
-    mongoose.connect(
-    `mongodb://${user}:${pass}@${server}:27017/opentacos?authSource=admin&readPreference=primary&ssl=false&replicaSet=rs0`,
-    { autoIndex: false }
-    )
-
+    // /* eslint-disable @typescript-eslint/no-floating-promises */
     mongoose.connection.on('open', onConnected)
 
     mongoose.connection.on(
@@ -41,6 +36,10 @@ export const connectDB = (onConnected: () => any = defaultFn): any => {
         console.error('MongoDB connection error', e)
         process.exit(1)
       }
+    )
+    await mongoose.connect(
+    `mongodb://${user}:${pass}@${server}:27017/opentacos?authSource=admin&readPreference=primary&ssl=false&replicaSet=rs0`,
+    { autoIndex: false }
     )
   } catch (e) {
     console.error("Can't connect to db")
@@ -53,8 +52,8 @@ export const createIndexes = async (): Promise<void> => {
   await getAreaModel().ensureIndexes()
   await getMediaModel().ensureIndexes()
 }
-export const gracefulExit = (exitCode: number = 0): void => {
-  mongoose.connection.close(function () {
+export const gracefulExit = async (exitCode: number = 0): Promise<void> => {
+  await mongoose.connection.close(function () {
     console.log('Gracefully exiting.')
     process.exit(exitCode)
   })
