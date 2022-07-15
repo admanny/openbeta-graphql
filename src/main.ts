@@ -9,6 +9,13 @@ import AreaDataSource from './model/AreaDataSource.js'
 import { createContext, permissions } from './auth/index.js'
 import streamListener from './db/edit/streamListener.js'
 
+export const defaultPostConnect = async (): Promise<void> => {
+  getMediaModel()
+  await createIndexes()
+  console.log('Kudos!')
+  await streamListener(mongoose.connection)
+}
+
 // eslint-disable-next-line
 (async function (): Promise<void> {
   const schema = applyMiddleware(graphqlSchema, permissions.generate(graphqlSchema))
@@ -24,12 +31,7 @@ import streamListener from './db/edit/streamListener.js'
     cache: 'bounded'
   })
 
-  await connectDB(async () => {
-    getMediaModel()
-    await createIndexes()
-    console.log('Kudos!')
-    await streamListener(mongoose.connection)
-  })
+  await connectDB(defaultPostConnect)
 
   const port = 4000
 
